@@ -5,9 +5,12 @@ import {
   ScrollView,
   StyleSheet,
   Platform,
-  Text,
+  TouchableOpacity,
 } from 'react-native';
+import OIcon from 'react-native-vector-icons/Octicons';
+import FIcon from 'react-native-vector-icons/Feather';
 import { Color } from './../../../config';
+import AppText from './../../common/text/AppText';
 
 export default class NoteBuilder extends Component<any, any> {
   private wrapperContent: any;
@@ -15,7 +18,7 @@ export default class NoteBuilder extends Component<any, any> {
 
   constructor(props: any) {
     super(props);
-    this.state = { title: 'Hello world', content: '', color: Color.SHARK };
+    this.state = { title: '', content: '', color: Color.SHARK };
     this.wrapperTitle = React.createRef();
     this.wrapperContent = React.createRef();
   }
@@ -57,15 +60,28 @@ export default class NoteBuilder extends Component<any, any> {
           />
         </View>
         <View style={styles.actions}>
-          <Text>Edited 15:48</Text>
-          <Text>Edited 15:48</Text>
-          <Text>Edited 15:48</Text>
+          <TouchableOpacity style={styles.iconWrapper}>
+            <OIcon
+              name="diff-added"
+              size={25}
+              color={Color.ATHENS_GRAY.value}
+            />
+          </TouchableOpacity>
+          <AppText>Edited 15:48</AppText>
+          <TouchableOpacity style={[styles.iconWrapper, styles.iconActive]}>
+            <FIcon
+              name="more-vertical"
+              size={25}
+              color={Color.ATHENS_GRAY.value}
+            />
+          </TouchableOpacity>
         </View>
       </ScrollView>
     );
   }
 }
 
+const actionsHeight = 60;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -97,9 +113,20 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-    backgroundColor: 'red',
-    padding: 20,
+    height: actionsHeight,
+    alignItems: 'center',
+    paddingTop: 16,
+    paddingBottom: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  iconWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: actionsHeight,
+    width: actionsHeight,
+  },
+  iconActive: {
+    backgroundColor: Color.SHARK_DARKER.value,
   },
 });
