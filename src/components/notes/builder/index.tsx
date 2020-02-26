@@ -15,15 +15,9 @@ export default class NoteBuilder extends Component<any, any> {
 
   constructor(props: any) {
     super(props);
-    this.state = { title: '', content: '', color: Color.SHARK };
+    this.state = { title: 'Hello world', content: '', color: Color.SHARK };
     this.wrapperTitle = React.createRef();
     this.wrapperContent = React.createRef();
-  }
-
-  componentDidMount() {
-    if (this.wrapperTitle) {
-      this.wrapperTitle?.current?.focus();
-    }
   }
 
   handleTitleChange = (title: string) => this.setState({ title });
@@ -87,11 +81,12 @@ const styles = StyleSheet.create({
     color: Color.ATHENS_GRAY.value,
     margin: 8,
     padding: 4,
-    fontSize: 16,
+    fontSize: 20,
+    fontFamily: 'Roboto',
   },
   titleText: {
     marginTop: 16,
-    fontSize: 20,
+    fontSize: 45,
     fontWeight: Platform.OS === 'ios' ? '600' : 'bold',
   },
   contentText: {
