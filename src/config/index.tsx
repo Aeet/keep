@@ -10,7 +10,9 @@ export class Color {
   static readonly PURPLE = new Color('purple', '#42275e');
   static readonly PINK = new Color('pink', '#5b2245');
   static readonly BROWN = new Color('brown', '#442f19');
-  static readonly GREY = new Color('grey', '#3c3f43');
+  static readonly GRAY = new Color('gray', '#3c3f43');
+  static readonly ATHENS_GRAY = new Color('Athens Gray', '#E8EAED');
+  static readonly OSLO_GRAY = new Color('Oslo Gray', '#80868B');
 
   static readonly ALL_COLORS = [
     Color.RED,
@@ -23,7 +25,9 @@ export class Color {
     Color.PURPLE,
     Color.PINK,
     Color.BROWN,
-    Color.GREY,
+    Color.GRAY,
+    Color.ATHENS_GRAY,
+    Color.OSLO_GRAY,
   ];
 
   // private to disallow creating other instances of this type
