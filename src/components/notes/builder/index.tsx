@@ -4,13 +4,21 @@ import {
   TextInput,
   ScrollView,
   StyleSheet,
-  Platform,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import OIcon from 'react-native-vector-icons/Octicons';
 import FIcon from 'react-native-vector-icons/Feather';
+import FAIcon from 'react-native-vector-icons/FontAwesome';
+import MIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Color } from './../../../config';
 import AppText from './../../common/text/AppText';
+import BottomMenuDrawer from '../../common/menu/BottomMenuDrawer';
+import BottomMenuItem from '../../common/menu/BottomMenuItem';
+import ColorPicker from '../../common/menu/ColorPicker';
+
+const MENU_OPTIONS = 'MENU_OPTIONS';
+const MENU_SETTINGS = 'MENU_SETTINGS';
 
 export default class NoteBuilder extends Component<any, any> {
   private wrapperContent: any;
@@ -18,17 +26,32 @@ export default class NoteBuilder extends Component<any, any> {
 
   constructor(props: any) {
     super(props);
-    this.state = { title: '', content: '', color: Color.SHARK };
+    this.state = {
+      title: '',
+      content: '',
+      color: Color.SHARK,
+      drawerMenu: false,
+    };
     this.wrapperTitle = React.createRef();
     this.wrapperContent = React.createRef();
   }
 
+  handleShowOptions = () =>
+    this.setState((prevState: any) => ({
+      drawerMenu: prevState.drawerMenu !== MENU_OPTIONS ? MENU_OPTIONS : null,
+    }));
+  handleShowSettings = () =>
+    this.setState((prevState: any) => ({
+      drawerMenu: prevState.drawerMenu !== MENU_SETTINGS ? MENU_SETTINGS : null,
+    }));
   handleTitleChange = (title: string) => this.setState({ title });
   handleContentChange = (content: string) => this.setState({ content });
   handleSubmit = () => this.wrapperContent.current.focus();
 
   render() {
-    const { title, content } = this.state;
+    const { title, content, drawerMenu } = this.state;
+    const menuOptionsActive = drawerMenu === MENU_OPTIONS;
+    const menuSettingsActive = drawerMenu === MENU_SETTINGS;
 
     return (
       <ScrollView
@@ -60,28 +83,90 @@ export default class NoteBuilder extends Component<any, any> {
           />
         </View>
         <View style={styles.actions}>
-          <TouchableOpacity style={styles.iconWrapper}>
+          <TouchableOpacity
+            style={[styles.iconWrapper, menuOptionsActive && styles.iconActive]}
+            onPress={this.handleShowOptions}
+          >
             <OIcon
               name="diff-added"
-              size={25}
+              size={20}
               color={Color.ATHENS_GRAY.value}
             />
           </TouchableOpacity>
           <AppText>Edited 15:48</AppText>
-          <TouchableOpacity style={[styles.iconWrapper, styles.iconActive]}>
+          <TouchableOpacity
+            onPress={this.handleShowSettings}
+            style={[
+              styles.iconWrapper,
+              menuSettingsActive && styles.iconActive,
+            ]}
+          >
             <FIcon
               name="more-vertical"
-              size={25}
+              size={20}
               color={Color.ATHENS_GRAY.value}
             />
           </TouchableOpacity>
         </View>
+        <BottomMenuDrawer visible={drawerMenu === MENU_OPTIONS}>
+          <BottomMenuItem
+            text="Take photo"
+            renderIcon={() => (
+              <MIcon
+                name="camera-outline"
+                size={20}
+                color={Color.ATHENS_GRAY.value}
+              />
+            )}
+          />
+          <BottomMenuItem
+            text="Choose image"
+            renderIcon={() => (
+              <MIcon
+                name="image-outline"
+                size={20}
+                color={Color.ATHENS_GRAY.value}
+              />
+            )}
+          />
+          <BottomMenuItem
+            text="Drawing"
+            renderIcon={() => (
+              <FAIcon
+                name="paint-brush"
+                size={20}
+                color={Color.ATHENS_GRAY.value}
+              />
+            )}
+          />
+          <BottomMenuItem
+            text="Recording"
+            renderIcon={() => (
+              <MIcon
+                name="microphone"
+                size={20}
+                color={Color.ATHENS_GRAY.value}
+              />
+            )}
+          />
+          <BottomMenuItem
+            text="Checkboxes"
+            renderIcon={() => (
+              <MIcon
+                name="checkbox-marked-outline"
+                size={20}
+                color={Color.ATHENS_GRAY.value}
+              />
+            )}
+          />
+          <ColorPicker />
+        </BottomMenuDrawer>
       </ScrollView>
     );
   }
 }
 
-const actionsHeight = 60;
+const actionsHeight = 50;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -97,28 +182,39 @@ const styles = StyleSheet.create({
     color: Color.ATHENS_GRAY.value,
     margin: 8,
     padding: 4,
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: 'Roboto',
   },
   titleText: {
     marginTop: 16,
-    fontSize: 45,
-    fontWeight: Platform.OS === 'ios' ? '600' : 'bold',
+    fontSize: 25,
   },
   contentText: {
     flex: 1,
     textAlignVertical: 'top',
   },
   actions: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
     height: actionsHeight,
     alignItems: 'center',
-    paddingTop: 16,
-    paddingBottom: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    backgroundColor: Color.SHARK.value,
+    zIndex: 10,
+
+    ...Platform.select({
+      ios: {
+        backgroundColor: Color.SHARK.value,
+        shadowColor: Color.SHARK_DARKER.value,
+        shadowOffset: { width: 0, height: -1 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+      },
+      android: {
+        borderTopWidth: 1,
+        borderTopColor: Color.SHARK_DARKER.value,
+        elevation: 1,
+      },
+    }),
   },
   iconWrapper: {
     justifyContent: 'center',

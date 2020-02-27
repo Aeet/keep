@@ -18,6 +18,7 @@ export class Color {
   static readonly SHARK_DARKER = new Color('Shark dark', '#1c1d20');
 
   static readonly ALL_COLORS = [
+    Color.SHARK,
     Color.RED,
     Color.ORANGE,
     Color.YELLOW,
