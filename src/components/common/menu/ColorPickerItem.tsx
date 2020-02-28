@@ -15,6 +15,9 @@ interface ColorPickerItemProps {
   onPress: Function;
 }
 
+type EndResult = { finished: boolean };
+type EndCallback = (result: EndResult) => void;
+
 const animationDuration = 250;
 const iconWrapperSize = 32;
 const iconWrapperHighlightedSize = iconWrapperSize * 1.4;
@@ -60,33 +63,38 @@ const ColorPickerItem: SFC<ColorPickerItemProps> = ({
   const scaleValue = new Animated.Value(0.01);
   const opacityValue = new Animated.Value(maxOpacity);
 
-  const hideHighlighter = (duration: number) => {
-    Animated.timing(opacityValue, {
-      toValue: 0.01,
-      duration: duration,
-    }).start(() => {
-      scaleValue.setValue(0.01);
-      opacityValue.setValue(maxOpacity);
-      onPress(color); // TODO remove
-    });
-  };
-
-  const onPressedIn = () => {
+  const startHighlighter = (onDone?: EndCallback) => {
     Animated.timing(scaleValue, {
       toValue: 1,
       duration: animationDuration,
       easing: Easing.bezier(0.0, 0.0, 0.2, 1),
-    }).start();
+    }).start(onDone);
+  };
+
+  const stopHighlighter = (duration: number, onDone?: EndCallback) => {
+    Animated.timing(opacityValue, {
+      toValue: 0.01,
+      duration: duration,
+    }).start(res => {
+      scaleValue.setValue(0.01);
+      opacityValue.setValue(maxOpacity);
+      onDone?.(res);
+    });
+  };
+
+  const onPressedIn = () => {
+    startHighlighter();
   };
 
   const onPressedOut = () => {
-    hideHighlighter(animationDuration);
+    stopHighlighter(animationDuration + 50, () => onPress(color));
   };
 
-  // const onPressed = () => {
-  //   hideHighlighter(0);
-  //   // onPress(color);
-  // };
+  const onPressed = () => {
+    startHighlighter(() => {
+      stopHighlighter(animationDuration, () => onPress(color));
+    });
+  };
 
   const iconWrapperHighlightedStyle = {
     transform: [{ scale: scaleValue }],
@@ -97,7 +105,7 @@ const ColorPickerItem: SFC<ColorPickerItemProps> = ({
     <TouchableWithoutFeedback
       onPressIn={onPressedIn}
       onPressOut={onPressedOut}
-      // onPress={onPressed} // TODO Fix bug animation stops when compenent rerender after color props changed ...
+      onPress={onPressed}
     >
       <View style={styles.colorWrapper}>
         <Animated.View
