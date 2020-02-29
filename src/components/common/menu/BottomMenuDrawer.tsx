@@ -29,10 +29,10 @@ const styles = StyleSheet.create<Styles>({
     fontSize: 14,
     width,
     opacity: 0,
+    backgroundColor: Color.SHARK.value,
 
     ...Platform.select({
       ios: {
-        backgroundColor: Color.SHARK.value,
         shadowColor: Color.SHARK_DARKER.value,
         shadowOffset: { width: 0, height: -1 },
         shadowOpacity: 0.8,

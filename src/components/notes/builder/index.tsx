@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Platform,
+  Keyboard,
 } from 'react-native';
 import OIcon from 'react-native-vector-icons/Octicons';
 import FIcon from 'react-native-vector-icons/Feather';
@@ -19,6 +20,7 @@ import ColorPicker from '../../common/menu/ColorPicker';
 
 const MENU_OPTIONS = 'MENU_OPTIONS';
 const MENU_SETTINGS = 'MENU_SETTINGS';
+type drawerType = 'MENU_OPTIONS' | 'MENU_SETTINGS';
 
 export default class NoteBuilder extends Component<any, any> {
   private wrapperContent: any;
@@ -36,14 +38,16 @@ export default class NoteBuilder extends Component<any, any> {
     this.wrapperContent = React.createRef();
   }
 
-  handleShowOptions = () =>
+  handleShowOptions = () => this.handleOpenDrawer(MENU_OPTIONS);
+  handleShowSettings = () => this.handleOpenDrawer(MENU_SETTINGS);
+
+  handleOpenDrawer = (drawer: drawerType) => {
+    Keyboard.dismiss();
     this.setState((prevState: any) => ({
-      drawerMenu: prevState.drawerMenu !== MENU_OPTIONS ? MENU_OPTIONS : null,
+      drawerMenu: prevState.drawerMenu !== drawer ? drawer : null,
     }));
-  handleShowSettings = () =>
-    this.setState((prevState: any) => ({
-      drawerMenu: prevState.drawerMenu !== MENU_SETTINGS ? MENU_SETTINGS : null,
-    }));
+  };
+  handleHideDrawer = () => this.setState({ drawerMenu: false });
   handleTitleChange = (title: string) => this.setState({ title });
   handleContentChange = (content: string) => this.setState({ content });
   handleSubmit = () => this.wrapperContent.current.focus();
@@ -54,11 +58,12 @@ export default class NoteBuilder extends Component<any, any> {
     const menuSettingsActive = drawerMenu === MENU_SETTINGS;
 
     return (
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        contentContainerStyle={styles.container}
-      >
-        <View style={styles.wrapper}>
+      <View style={styles.container}>
+        <ScrollView
+          style={styles.wrapper}
+          contentContainerStyle={styles.content}
+          contentInsetAdjustmentBehavior="automatic"
+        >
           <TextInput
             value={title}
             onChangeText={this.handleTitleChange}
@@ -70,6 +75,7 @@ export default class NoteBuilder extends Component<any, any> {
             style={[styles.textInput, styles.titleText]}
             placeholderTextColor={Color.OSLO_GRAY.value}
             placeholder="Title"
+            onFocus={this.handleHideDrawer}
           />
           <TextInput
             value={content}
@@ -80,8 +86,10 @@ export default class NoteBuilder extends Component<any, any> {
             style={[styles.textInput, styles.contentText]}
             placeholderTextColor={Color.OSLO_GRAY.value}
             placeholder="Note"
+            onFocus={this.handleHideDrawer}
+            scrollEnabled={false}
           />
-        </View>
+        </ScrollView>
         <View style={styles.actions}>
           <TouchableOpacity
             style={[styles.iconWrapper, menuOptionsActive && styles.iconActive]}
@@ -161,7 +169,7 @@ export default class NoteBuilder extends Component<any, any> {
           />
           <ColorPicker />
         </BottomMenuDrawer>
-      </ScrollView>
+      </View>
     );
   }
 }
@@ -171,12 +179,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#202124',
+    overflow: 'hidden',
   },
   wrapper: {
-    marginTop: 16,
-    marginBottom: 20,
-    alignContent: 'stretch',
     flex: 1,
+  },
+  content: {
+    flexGrow: 1,
   },
   textInput: {
     color: Color.ATHENS_GRAY.value,
