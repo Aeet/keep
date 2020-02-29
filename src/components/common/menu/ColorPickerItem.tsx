@@ -1,4 +1,4 @@
-import React, { SFC } from 'react';
+import React, { SFC, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -20,7 +20,7 @@ type EndCallback = (result: EndResult) => void;
 
 const animationDuration = 250;
 const iconWrapperSize = 32;
-const iconWrapperHighlightedSize = iconWrapperSize * 1.4;
+const iconWrapperHighlightedSize = iconWrapperSize * 1.3;
 const maxOpacity = 0.5;
 
 const styles = StyleSheet.create({
@@ -63,10 +63,20 @@ const ColorPickerItem: SFC<ColorPickerItemProps> = ({
   const scaleValue = new Animated.Value(0.01);
   const opacityValue = new Animated.Value(maxOpacity);
 
-  const startHighlighter = (onDone?: EndCallback) => {
+  useEffect(() => {
+    if (selected) {
+      startHighlighter(animationDuration - 100, () => {
+        stopHighlighter(animationDuration + 100);
+      });
+    } else {
+      opacityValue.setValue(0.01);
+    }
+  }, [selected]);
+
+  const startHighlighter = (duration: number, onDone?: EndCallback) => {
     Animated.timing(scaleValue, {
       toValue: 1,
-      duration: animationDuration,
+      duration: duration,
       easing: Easing.bezier(0.0, 0.0, 0.2, 1),
     }).start(onDone);
   };
@@ -83,17 +93,17 @@ const ColorPickerItem: SFC<ColorPickerItemProps> = ({
   };
 
   const onPressedIn = () => {
-    startHighlighter();
+    startHighlighter(animationDuration);
   };
 
   const onPressedOut = () => {
-    stopHighlighter(animationDuration + 50, () => onPress(color));
+    stopHighlighter(animationDuration + 100);
   };
 
   const onPressed = () => {
-    startHighlighter(() => {
-      stopHighlighter(animationDuration, () => onPress(color));
-    });
+    if (!selected) {
+      onPress(color);
+    }
   };
 
   const iconWrapperHighlightedStyle = {
