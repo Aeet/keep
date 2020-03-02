@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
 });
 
 const ColorPickerItem: SFC<ColorPickerItemProps> = ({
-  color,
   color: { value },
   selected,
   onPress,
@@ -102,7 +101,7 @@ const ColorPickerItem: SFC<ColorPickerItemProps> = ({
 
   const onPressed = () => {
     if (!selected) {
-      onPress(color);
+      onPress(value);
     }
   };
 

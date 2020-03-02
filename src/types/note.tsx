@@ -1,7 +1,6 @@
-import { Color } from 'src/config';
-
 export interface Note {
+  id?: number;
   title?: string;
   content?: string;
-  color?: Color;
+  color?: string;
 }

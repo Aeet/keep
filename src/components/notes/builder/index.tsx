@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Platform,
   Keyboard,
+  StatusBar,
 } from 'react-native';
 import OIcon from 'react-native-vector-icons/Octicons';
 import FIcon from 'react-native-vector-icons/Feather';
@@ -17,6 +18,8 @@ import AppText from './../../common/text/AppText';
 import BottomMenuDrawer from '../../common/menu/BottomMenuDrawer';
 import BottomMenuItem from '../../common/menu/BottomMenuItem';
 import ColorPicker from '../../common/menu/ColorPicker';
+import { Notes } from '../helper';
+import HeaderBar from './HeaderBar';
 
 const MENU_OPTIONS = 'MENU_OPTIONS';
 const MENU_SETTINGS = 'MENU_SETTINGS';
@@ -31,11 +34,25 @@ export default class NoteBuilder extends Component<any, any> {
     this.state = {
       title: '',
       content: '',
-      color: Color.SHARK,
+      color: Color.SHARK.value,
       drawerMenu: false,
     };
     this.wrapperTitle = React.createRef();
     this.wrapperContent = React.createRef();
+  }
+
+  componentDidMount() {
+    const { noteId } = this.props.route.params;
+    const note = Notes.find(({ id }) => id === noteId);
+
+    if (note) {
+      this.setState({
+        title: note.title,
+        content: note.content,
+        color: note.color,
+      });
+      this.props.navigation.setParams({ backgroundColor: note.color });
+    }
   }
 
   handleShowOptions = () => this.handleOpenDrawer(MENU_OPTIONS);
@@ -51,14 +68,40 @@ export default class NoteBuilder extends Component<any, any> {
   handleTitleChange = (title: string) => this.setState({ title });
   handleContentChange = (content: string) => this.setState({ content });
   handleSubmit = () => this.wrapperContent.current.focus();
+  setColor = (color: string) => {
+    this.props.navigation.setParams({ backgroundColor: color });
+    this.setState({ color });
+  };
+
+  getShadowStyle = () => ({
+    ...Platform.select({
+      ios: {
+        backgroundColor: this.state.color,
+        shadowColor: Color.getDarkColor(this.state.color),
+        shadowOffset: { width: 0, height: -1 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+      },
+      android: {
+        borderTopWidth: 1,
+        borderTopColor: Color.getDarkColor(this.state.color),
+        elevation: 1,
+      },
+    }),
+  });
 
   render() {
-    const { title, content, drawerMenu } = this.state;
+    const { title, content, drawerMenu, color } = this.state;
     const menuOptionsActive = drawerMenu === MENU_OPTIONS;
     const menuSettingsActive = drawerMenu === MENU_SETTINGS;
 
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: color }]}>
+        <StatusBar
+          barStyle={Platform.OS === 'ios' ? 'default' : 'light-content'}
+          backgroundColor={color}
+        />
+        <HeaderBar />
         <ScrollView
           style={styles.wrapper}
           contentContainerStyle={styles.content}
@@ -90,40 +133,57 @@ export default class NoteBuilder extends Component<any, any> {
             scrollEnabled={false}
           />
         </ScrollView>
-        <View style={styles.actions}>
+        <View
+          style={[
+            styles.actions,
+            this.getShadowStyle(),
+            { backgroundColor: color },
+          ]}
+        >
           <TouchableOpacity
-            style={[styles.iconWrapper, menuOptionsActive && styles.iconActive]}
+            style={[
+              styles.iconWrapper,
+              menuOptionsActive && {
+                backgroundColor: Color.getDarkColor(color),
+              },
+            ]}
             onPress={this.handleShowOptions}
           >
             <OIcon
               name="diff-added"
               size={20}
-              color={Color.ATHENS_GRAY.value}
+              color={Color.SILVER_SAND.value}
             />
           </TouchableOpacity>
-          <AppText>Edited 15:48</AppText>
+          <AppText color={Color.SILVER_SAND.value}>Edited 15:48</AppText>
           <TouchableOpacity
             onPress={this.handleShowSettings}
             style={[
               styles.iconWrapper,
-              menuSettingsActive && styles.iconActive,
+              menuSettingsActive && {
+                backgroundColor: Color.getDarkColor(color),
+              },
             ]}
           >
             <FIcon
               name="more-vertical"
               size={20}
-              color={Color.ATHENS_GRAY.value}
+              color={Color.SILVER_SAND.value}
             />
           </TouchableOpacity>
         </View>
-        <BottomMenuDrawer visible={drawerMenu === MENU_OPTIONS}>
+        {/* TODO Mover BottomMenuDrawer to it's own componenet */}
+        <BottomMenuDrawer
+          visible={drawerMenu === MENU_OPTIONS}
+          style={[{ backgroundColor: color }, this.getShadowStyle()]}
+        >
           <BottomMenuItem
             text="Take photo"
             renderIcon={() => (
               <MIcon
                 name="camera-outline"
                 size={20}
-                color={Color.ATHENS_GRAY.value}
+                color={Color.SILVER_SAND.value}
               />
             )}
           />
@@ -133,7 +193,7 @@ export default class NoteBuilder extends Component<any, any> {
               <MIcon
                 name="image-outline"
                 size={20}
-                color={Color.ATHENS_GRAY.value}
+                color={Color.SILVER_SAND.value}
               />
             )}
           />
@@ -143,7 +203,7 @@ export default class NoteBuilder extends Component<any, any> {
               <FAIcon
                 name="paint-brush"
                 size={20}
-                color={Color.ATHENS_GRAY.value}
+                color={Color.SILVER_SAND.value}
               />
             )}
           />
@@ -153,7 +213,7 @@ export default class NoteBuilder extends Component<any, any> {
               <MIcon
                 name="microphone"
                 size={20}
-                color={Color.ATHENS_GRAY.value}
+                color={Color.SILVER_SAND.value}
               />
             )}
           />
@@ -163,11 +223,11 @@ export default class NoteBuilder extends Component<any, any> {
               <MIcon
                 name="checkbox-marked-outline"
                 size={20}
-                color={Color.ATHENS_GRAY.value}
+                color={Color.SILVER_SAND.value}
               />
             )}
           />
-          <ColorPicker />
+          <ColorPicker onChangeColor={this.setColor} color={color} />
         </BottomMenuDrawer>
       </View>
     );
@@ -209,21 +269,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: Color.SHARK.value,
     zIndex: 10,
-
-    ...Platform.select({
-      ios: {
-        backgroundColor: Color.SHARK.value,
-        shadowColor: Color.SHARK_DARKER.value,
-        shadowOffset: { width: 0, height: -1 },
-        shadowOpacity: 0.8,
-        shadowRadius: 2,
-      },
-      android: {
-        borderTopWidth: 1,
-        borderTopColor: Color.SHARK_DARKER.value,
-        elevation: 1,
-      },
-    }),
   },
   iconWrapper: {
     justifyContent: 'center',
@@ -231,7 +276,7 @@ const styles = StyleSheet.create({
     height: actionsHeight,
     width: actionsHeight,
   },
-  iconActive: {
-    backgroundColor: Color.SHARK_DARKER.value,
-  },
+  // iconActive: {
+  //   backgroundColor: Color.SHARK_DARKER.value,
+  // },
 });

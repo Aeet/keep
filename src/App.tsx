@@ -1,18 +1,17 @@
 import React from 'react';
-import { SafeAreaView, StatusBar } from 'react-native';
-// import Notes from './components/notes';
-import NoteBuilder from './components/notes/builder';
-import { NavigationContainer } from '@react-navigation/native';
+import { SafeAreaView, StatusBar, Platform } from 'react-native';
+import Navigation from './navigation';
+import { Color } from './config';
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView style={{ flex: 1 }}>
-        {/* <Notes /> */}
-        <NoteBuilder />
-      </SafeAreaView>
-    </NavigationContainer>
+    <SafeAreaView style={{ flex: 1 }}>
+      <StatusBar
+        barStyle={Platform.OS === 'ios' ? 'default' : 'light-content'}
+        backgroundColor={Color.SHARK.value}
+      />
+      <Navigation />
+    </SafeAreaView>
   );
 };
 

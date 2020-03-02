@@ -1,19 +1,27 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Platform } from 'react-native';
+import { StyleSheet, Platform, TouchableOpacity } from 'react-native';
 import AppText from '../common/text/AppText';
 import { Note } from 'src/types/note';
+import { Color } from './../../config';
 
 export interface NoteItemProps {
   note: Note;
+  editNote: Function;
 }
 
 export default class NoteItem extends Component<NoteItemProps, any> {
   render() {
     const { title, content, color } = this.props.note;
 
+    const style = {
+      backgroundColor: color ?? 'none',
+      borderWidth: !color || color === Color.SHARK.value ? 1 : 0,
+    };
+
     return (
-      <View
-        style={[styles.wrapper, { backgroundColor: color?.value ?? 'none' }]}
+      <TouchableOpacity
+        style={[styles.wrapper, style]}
+        onPress={() => this.props.editNote()}
       >
         {title && (
           <AppText
@@ -25,7 +33,7 @@ export default class NoteItem extends Component<NoteItemProps, any> {
           </AppText>
         )}
         <AppText numberOfLines={10}>{content}</AppText>
-      </View>
+      </TouchableOpacity>
     );
   }
 }

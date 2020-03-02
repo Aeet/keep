@@ -1,10 +1,11 @@
-import React, { SFC, useState } from 'react';
+import React, { SFC } from 'react';
 import { StyleSheet, FlatList } from 'react-native';
 import { Color } from './../../../config';
 import ColorPickerItemProps from './ColorPickerItem';
 
 interface ColorPickerProps {
   color?: string;
+  onChangeColor: Function;
 }
 
 const styles = StyleSheet.create({
@@ -15,9 +16,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const ColorPicker: SFC<ColorPickerProps> = () => {
-  const [color, setColor] = useState(Color.SHARK);
-
+const ColorPicker: SFC<ColorPickerProps> = ({ color, onChangeColor }) => {
   return (
     <FlatList
       contentContainerStyle={styles.container}
@@ -27,8 +26,8 @@ const ColorPicker: SFC<ColorPickerProps> = () => {
       renderItem={({ item }) => (
         <ColorPickerItemProps
           color={item}
-          onPress={setColor}
-          selected={color.value === item.value}
+          onPress={onChangeColor}
+          selected={color === item.value}
         />
       )}
       keyExtractor={item => item.value}

@@ -11,8 +11,8 @@ export class Color {
   static readonly PINK = new Color('pink', '#5b2245');
   static readonly BROWN = new Color('brown', '#442f19');
   static readonly GRAY = new Color('gray', '#3c3f43');
-  static readonly ATHENS_GRAY = new Color('Athens Gray', '#E8EAED');
 
+  static readonly ATHENS_GRAY = new Color('Athens Gray', '#E8EAED');
   static readonly OSLO_GRAY = new Color('Oslo Gray', '#80868B');
   static readonly SILVER_SAND = new Color('Silver Sand', '#b4b5b5');
   static readonly SHARK_DARKER = new Color('Shark dark', '#1c1d20');
@@ -30,7 +30,6 @@ export class Color {
     Color.PINK,
     Color.BROWN,
     Color.GRAY,
-    Color.ATHENS_GRAY,
   ];
 
   // private to disallow creating other instances of this type
@@ -43,5 +42,34 @@ export class Color {
     return Color.ALL_COLORS[
       Math.floor(Math.random() * Color.ALL_COLORS.length)
     ];
+  }
+
+  static getDarkColor(color: string) {
+    switch (color) {
+      case Color.SHARK.value:
+        return '#1c1d20';
+      case Color.RED.value:
+        return '#522624';
+      case Color.ORANGE.value:
+        return '#574216';
+      case Color.YELLOW.value:
+        return '#595316';
+      case Color.GREEN.value:
+        return '#2e501c';
+      case Color.TURQUOISE.value:
+        return '#134843';
+      case Color.BLUE.value:
+        return '#284c54';
+      case Color.DARK_BLUE.value:
+        return '#1b3455';
+      case Color.PURPLE.value:
+        return '#3b2354';
+      case Color.PINK.value:
+        return '#511e3e';
+      case Color.BROWN.value:
+        return '#3d2a16';
+      case Color.GRAY.value:
+        return '#36383c';
+    }
   }
 }

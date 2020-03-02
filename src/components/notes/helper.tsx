@@ -3,6 +3,8 @@ import { Color } from '../../config';
 
 // TODO REMOVE THIS FILE ...
 
+const createId = () => Math.floor(Math.random() * Date.now());
+
 const BIG_TITLE =
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis auctor dui aliquam sapien mattis';
 const TITLE = 'Lorem ipsum dolor sit amet';
@@ -14,18 +16,24 @@ const CONTENT = `
 `;
 
 export const Note1 = {
+  id: createId(),
   title: BIG_TITLE,
   content: CONTENT + CONTENT,
-  color: Color.SHARK,
+  color: Color.SHARK.value,
 };
 
 export const Note2 = {
+  id: createId(),
   title: TITLE,
   content: CONTENT,
+  color: Color.SHARK.value,
 };
 
 export const getNote = (withTitle?: boolean): Note => ({
+  id: createId(),
   title: withTitle ? TITLE : undefined,
   content: CONTENT,
-  color: Color.getRandomColor(),
+  color: Color.getRandomColor().value,
 });
+
+export const Notes = [Note1, getNote(true), getNote(), getNote(true), Note2];
