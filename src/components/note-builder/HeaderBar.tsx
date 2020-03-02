@@ -1,9 +1,9 @@
 import React, { useLayoutEffect } from 'react';
-import { RightActionsContainer, HeaderButton } from '../../navigation/header';
+import { RightActionsContainer, HeaderButton } from '../navigation/header';
 import FIcon from 'react-native-vector-icons/Feather';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
-import { Color } from './../../../config';
+import { Color } from '../../config';
 
 const HeaderBar = () => {
   const navigation = useNavigation();

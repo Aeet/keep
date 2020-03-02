@@ -13,12 +13,12 @@ import OIcon from 'react-native-vector-icons/Octicons';
 import FIcon from 'react-native-vector-icons/Feather';
 import FAIcon from 'react-native-vector-icons/FontAwesome';
 import MIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Color } from './../../../config';
-import AppText from './../../common/text/AppText';
-import BottomMenuDrawer from '../../common/menu/BottomMenuDrawer';
-import BottomMenuItem from '../../common/menu/BottomMenuItem';
-import ColorPicker from '../../common/menu/ColorPicker';
-import { Notes } from '../helper';
+import { Color } from '../../config';
+import AppText from '../common/text/AppText';
+import BottomMenuDrawer from '../common/menu/BottomMenuDrawer';
+import BottomMenuItem from '../common/menu/BottomMenuItem';
+import ColorPicker from '../common/menu/ColorPicker';
+import { Notes } from '../notes/helper';
 import HeaderBar from './HeaderBar';
 
 const MENU_OPTIONS = 'MENU_OPTIONS';

@@ -6,7 +6,7 @@ import {
   DrawerItem,
 } from '@react-navigation/drawer';
 import StackNavigator from './StackNavigator';
-import NoteBuilder from './../components/notes/builder';
+import NoteBuilder from '../components/note-builder';
 import { StyleSheet, Dimensions, View } from 'react-native';
 import { Color } from './../config';
 import AppText from './../components/common/text/AppText';

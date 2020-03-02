@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import Notes from './../components/notes';
-import NoteBuilder from './../components/notes/builder';
+import NoteBuilder from '../components/note-builder';
 import { Color } from './../config';
 
 const Stack = createStackNavigator();
