@@ -14,6 +14,7 @@ export class Color {
 
   static readonly ATHENS_GRAY = new Color('Athens Gray', '#E8EAED');
   static readonly OSLO_GRAY = new Color('Oslo Gray', '#80868B');
+  static readonly JUDGE_GRAY = new Color('Judge Gray', '#564c33');
   static readonly SILVER_SAND = new Color('Silver Sand', '#b4b5b5');
   static readonly SHARK_DARKER = new Color('Shark dark', '#1c1d20');
 

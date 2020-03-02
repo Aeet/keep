@@ -42,7 +42,7 @@ export default class NoteBuilder extends Component<any, any> {
   }
 
   componentDidMount() {
-    const { noteId } = this.props.route.params;
+    const { noteId } = this.props.route?.params ?? {};
     const note = Notes.find(({ id }) => id === noteId);
 
     if (note) {
