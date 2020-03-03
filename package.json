@@ -21,6 +21,7 @@
     "react-native-reanimated": "^1.7.0",
     "react-native-safe-area-context": "^0.7.3",
     "react-native-screens": "^2.2.0",
+    "react-native-svg": "^11.0.1",
     "react-native-vector-icons": "^6.6.0",
     "react-navigation-hooks": "^1.1.0"
   },
@@ -34,11 +35,13 @@
     "@typescript-eslint/eslint-plugin": "^2.12.0",
     "@typescript-eslint/parser": "^2.12.0",
     "babel-jest": "^24.9.0",
+    "babel-plugin-inline-import": "^3.0.0",
     "eslint": "^6.5.1",
     "eslint-plugin-prettier": "^3.1.2",
     "jest": "^24.9.0",
     "metro-react-native-babel-preset": "^0.56.0",
     "prettier": "^1.19.1",
+    "react-native-svg-transformer": "^0.14.3",
     "react-test-renderer": "16.9.0",
     "typescript": "^3.7.3"
   },
@@ -51,6 +54,9 @@
       "jsx",
       "json",
       "node"
-    ]
+    ],
+    "moduleNameMapper": {
+      "\\.svg": "<rootDir>/__mocks__/svgMock.js"
+    }
   }
 }
