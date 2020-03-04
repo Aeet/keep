@@ -1,9 +1,9 @@
 import React, { SFC } from 'react';
-import { View, ScrollView, StyleSheet, FlatList } from 'react-native';
+import { View, ScrollView, StyleSheet } from 'react-native';
 import NoteItem from './NoteItem';
 import { Notes as NoteList } from './helper';
 import { Note } from 'src/types/note';
-import BottomBar from './BottomBar';
+import BottomTab from './BottomTab';
 
 const Notes: SFC<any> = ({ navigation }) => {
   const goToNoteBuilder = (note: Note) =>
@@ -24,7 +24,7 @@ const Notes: SFC<any> = ({ navigation }) => {
           />
         ))}
       </ScrollView>
-      <BottomBar />
+      <BottomTab />
     </View>
   );
 };

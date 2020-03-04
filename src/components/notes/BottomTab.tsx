@@ -7,7 +7,7 @@ import ActionWrapper from '../../icons/action-wrapper.svg';
 import FAIcon from 'react-native-vector-icons/FontAwesome';
 import MIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const BottomBar = () => {
+const BottomTab = () => {
   const buttonProps = {
     style: styles.buttonWrapper,
     underlayColor: Color.GRAY.value,
@@ -70,7 +70,7 @@ const BottomBar = () => {
   );
 };
 
-export default BottomBar;
+export default BottomTab;
 
 const styles = StyleSheet.create({
   container: {
