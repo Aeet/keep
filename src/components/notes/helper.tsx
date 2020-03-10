@@ -25,7 +25,7 @@ export const Note1 = {
 export const Note2 = {
   id: createId(),
   title: TITLE,
-  content: CONTENT,
+  content: 'Curabitur in imperdiet tellus.',
   color: Color.SHARK.value,
 };
 
@@ -36,4 +36,4 @@ export const getNote = (withTitle?: boolean): Note => ({
   color: Color.getRandomColor().value,
 });
 
-export const Notes = [Note1, getNote(true), getNote(), getNote(true), Note2];
+export const Notes = [Note1, getNote(true), Note2, getNote(), getNote(true)];

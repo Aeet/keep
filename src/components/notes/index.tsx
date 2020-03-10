@@ -18,6 +18,7 @@ const SEARCH_BAR_FULL_HEIGHT = height + offsetTop;
 const Notes: SFC<any> = ({ navigation }) => {
   const scrollViewRef = useRef(null);
   let navbarTranslateValue = 0;
+  const [isGridView] = useState(false);
   const [scrollAnim] = useState(new Animated.Value(0));
   const [clampedScroll] = useState(
     Animated.diffClamp(
@@ -70,7 +71,7 @@ const Notes: SFC<any> = ({ navigation }) => {
         ref={scrollViewRef}
         contentInsetAdjustmentBehavior="automatic"
         style={styles.container}
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[styles.content, isGridView && styles.gridList]}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scrollAnim } } }],
           { useNativeDriver: true },
@@ -78,11 +79,12 @@ const Notes: SFC<any> = ({ navigation }) => {
         alwaysBounceVertical={false}
         onMomentumScrollEnd={handleMomentumScrollEnd}
       >
-        {NoteList.map((note: Note) => (
+        {NoteList.map((note: Note, index: number) => (
           <NoteItem
             key={note.id}
             note={note}
             editNote={() => goToNoteBuilder(note)}
+            index={index}
           />
         ))}
       </Animated.ScrollView>
@@ -104,5 +106,10 @@ const styles = StyleSheet.create({
   content: {
     paddingTop: SEARCH_BAR_FULL_HEIGHT + 15, // 15 SearchBar marginBottom
     paddingBottom: 90,
+  },
+  gridList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    overflow: 'hidden',
   },
 });

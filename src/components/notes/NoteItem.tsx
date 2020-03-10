@@ -1,17 +1,33 @@
 import React, { Component } from 'react';
-import { StyleSheet, Platform, TouchableOpacity } from 'react-native';
+import {
+  StyleSheet,
+  Platform,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
 import AppText from '../common/text/AppText';
 import { Note } from 'src/types/note';
 import { Color } from './../../config';
+const { width } = Dimensions.get('window');
 
 export interface NoteItemProps {
   note: Note;
   editNote: Function;
+  index: number;
+  type: 'list' | 'grid';
 }
 
 export default class NoteItem extends Component<NoteItemProps, any> {
+  static defaultProps = {
+    type: 'list',
+  };
+
   render() {
     const { title, content, color } = this.props.note;
+    const { index, type } = this.props;
+
+    const isOdd = index % 2 !== 0;
+    const isGrid = type === 'grid';
 
     const style = {
       backgroundColor: color ?? 'none',
@@ -20,7 +36,11 @@ export default class NoteItem extends Component<NoteItemProps, any> {
 
     return (
       <TouchableOpacity
-        style={[styles.wrapper, style]}
+        style={[
+          styles.wrapper,
+          style,
+          isGrid && [styles.gridItem, isOdd && styles.itemSeparator],
+        ]}
         onPress={() => this.props.editNote()}
       >
         {title && (
@@ -38,6 +58,9 @@ export default class NoteItem extends Component<NoteItemProps, any> {
   }
 }
 
+const margin = 10;
+const pourcentageMargin = (margin * 1.5 * 100) / width;
+
 const styles = StyleSheet.create({
   wrapper: {
     borderRadius: 8,
@@ -45,8 +68,16 @@ const styles = StyleSheet.create({
     borderColor: '#5f6368',
     borderWidth: 1,
     padding: 16,
-    margin: 10,
+    margin,
     marginTop: 0,
     marginBottom: 8,
+  },
+  gridItem: {
+    flexGrow: 0,
+    flexShrink: 0,
+    flexBasis: `${50 - pourcentageMargin}%`,
+  },
+  itemSeparator: {
+    marginLeft: 0,
   },
 });
