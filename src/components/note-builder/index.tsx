@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import OIcon from 'react-native-vector-icons/Octicons';
 import FIcon from 'react-native-vector-icons/Feather';
-import FAIcon from 'react-native-vector-icons/FontAwesome';
 import MIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Color } from '../../config';
 import AppText from '../common/text/AppText';
@@ -200,11 +199,7 @@ export default class NoteBuilder extends Component<any, any> {
           <BottomMenuItem
             text="Drawing"
             renderIcon={() => (
-              <FAIcon
-                name="paint-brush"
-                size={20}
-                color={Color.SILVER_SAND.value}
-              />
+              <MIcon name="brush" size={20} color={Color.SILVER_SAND.value} />
             )}
           />
           <BottomMenuItem

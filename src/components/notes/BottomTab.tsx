@@ -4,7 +4,6 @@ import { Color } from '../../config';
 import { SvgXml } from 'react-native-svg';
 import IconPlus from '../../icons/icon-plus.svg';
 import ActionWrapper from '../../icons/action-wrapper.svg';
-import FAIcon from 'react-native-vector-icons/FontAwesome';
 import MIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const BottomTab = () => {
@@ -26,11 +25,7 @@ const BottomTab = () => {
             />
           </TouchableHighlight>
           <TouchableHighlight {...buttonProps} onPress={() => {}}>
-            <FAIcon
-              name="paint-brush"
-              size={22}
-              color={Color.SILVER_SAND.value}
-            />
+            <MIcon name="brush" size={22} color={Color.SILVER_SAND.value} />
           </TouchableHighlight>
           <TouchableHighlight {...buttonProps} onPress={() => {}}>
             <MIcon
