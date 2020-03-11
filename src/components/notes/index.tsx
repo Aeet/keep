@@ -7,16 +7,17 @@ import {
   NativeScrollEvent,
 } from 'react-native';
 import NoteItem from './NoteItem';
-import { Notes as NoteList } from './helper';
-import { Note } from 'src/types/note';
+import { Note } from '../../store/types';
 import BottomTab from './BottomTab';
 import SearchBar, { SearchBarDimensions } from './SearchBar';
+import { useNote } from '../../store/note';
 const { height, offsetTop } = SearchBarDimensions;
 
 const SEARCH_BAR_FULL_HEIGHT = height + offsetTop;
 
 const Notes: SFC<any> = ({ navigation }) => {
   const scrollViewRef = useRef(null);
+  const [noteState] = useNote();
   let navbarTranslateValue = 0;
   const [isGridView] = useState(false);
   const [scrollAnim] = useState(new Animated.Value(0));
@@ -79,7 +80,7 @@ const Notes: SFC<any> = ({ navigation }) => {
         alwaysBounceVertical={false}
         onMomentumScrollEnd={handleMomentumScrollEnd}
       >
-        {NoteList.map((note: Note, index: number) => (
+        {noteState.items.map((note: Note, index: number) => (
           <NoteItem
             key={note.id}
             note={note}

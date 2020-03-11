@@ -6,7 +6,7 @@ import {
   Dimensions,
 } from 'react-native';
 import AppText from '../common/text/AppText';
-import { Note } from 'src/types/note';
+import { Note } from '../../store/types';
 import { Color } from './../../config';
 const { width } = Dimensions.get('window');
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { SafeAreaView, StatusBar, Platform } from 'react-native';
 import Navigation from './navigation';
 import { Color } from './config';
+import { NoteProvider } from './store/note';
 
 const App = () => {
   return (
@@ -10,7 +11,9 @@ const App = () => {
         barStyle={Platform.OS === 'ios' ? 'default' : 'light-content'}
         backgroundColor={Color.SHARK.value}
       />
-      <Navigation />
+      <NoteProvider>
+        <Navigation />
+      </NoteProvider>
     </SafeAreaView>
   );
 };

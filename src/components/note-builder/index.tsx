@@ -17,14 +17,20 @@ import AppText from '../common/text/AppText';
 import BottomMenuDrawer from '../common/menu/BottomMenuDrawer';
 import BottomMenuItem from '../common/menu/BottomMenuItem';
 import ColorPicker from '../common/menu/ColorPicker';
-import { Notes } from '../notes/helper';
 import HeaderBar from './HeaderBar';
+import { withNoteState } from '../../store/note';
+import { NoteState } from '../../store/types';
 
 const MENU_OPTIONS = 'MENU_OPTIONS';
 const MENU_SETTINGS = 'MENU_SETTINGS';
 type drawerType = 'MENU_OPTIONS' | 'MENU_SETTINGS';
+interface NoteBuilderProps {
+  noteState: NoteState;
+  route: any;
+  navigation: any;
+}
 
-export default class NoteBuilder extends Component<any, any> {
+class NoteBuilder extends Component<NoteBuilderProps, any> {
   private wrapperContent: any;
   private wrapperTitle: any;
 
@@ -42,7 +48,7 @@ export default class NoteBuilder extends Component<any, any> {
 
   componentDidMount() {
     const { noteId } = this.props.route?.params ?? {};
-    const note = Notes.find(({ id }) => id === noteId);
+    const note = this.props.noteState.items.find(({ id }) => id === noteId);
 
     if (note) {
       this.setState({
@@ -228,6 +234,8 @@ export default class NoteBuilder extends Component<any, any> {
     );
   }
 }
+
+export default withNoteState(NoteBuilder);
 
 const actionsHeight = 50;
 const styles = StyleSheet.create({
