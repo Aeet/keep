@@ -1,7 +1,6 @@
 import { Note } from './types';
 import { Color } from '../../config';
-
-const createId = () => Math.floor(Math.random() * Date.now());
+import { generateNoteId } from '../../services/note';
 
 const TITLE =
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis auctor dui aliquam sapien mattis';
@@ -16,7 +15,7 @@ export const generatetNote = (
   withTitle: boolean,
   contentSize: number,
 ): Note => ({
-  id: createId(),
+  id: generateNoteId(),
   title: withTitle
     ? TITLE.slice(0, Math.random() * (TITLE.length - 26) + 26)
     : undefined,

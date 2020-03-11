@@ -31,7 +31,7 @@ const BottomMenuItem: SFC<BottomMenuItemProps> = ({
   return (
     <TouchableHighlight
       style={styles.container}
-      underlayColor={Color.GRAY.value}
+      underlayColor="rgba(255, 255, 255, 0.2)"
       onPress={() => {}}
     >
       <View style={styles.menuItemWrapper}>

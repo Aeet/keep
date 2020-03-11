@@ -1,7 +1,9 @@
 import {
   Note,
   ADD_NOTE,
+  UPDATE_NOTE,
   REMOVE_NOTE,
+  SET_NOTE,
   SET_LIST_TYPE,
   NoteActionTypes,
   SetListTypeAction,
@@ -17,6 +19,20 @@ export function addNote(newNote: Note): NoteActionTypes {
 export function removeNote(note: Note): NoteActionTypes {
   return {
     type: REMOVE_NOTE,
+    payload: note,
+  };
+}
+
+export function updateNote(note: Note): NoteActionTypes {
+  return {
+    type: UPDATE_NOTE,
+    payload: note,
+  };
+}
+
+export function setNote(note: Note): NoteActionTypes {
+  return {
+    type: SET_NOTE,
     payload: note,
   };
 }

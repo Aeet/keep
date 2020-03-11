@@ -11,54 +11,64 @@ import {
 } from 'react-native';
 import OIcon from 'react-native-vector-icons/Octicons';
 import FIcon from 'react-native-vector-icons/Feather';
-import MIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Color } from '../../config';
 import AppText from '../common/text/AppText';
-import BottomMenuDrawer from '../common/menu/BottomMenuDrawer';
-import BottomMenuItem from '../common/menu/BottomMenuItem';
-import ColorPicker from '../common/menu/ColorPicker';
 import HeaderBar from './HeaderBar';
-import { withNoteState } from '../../store/note';
-import { NoteState } from '../../store/types';
+import { withNote, NoteDispatch } from '../../store/note';
+import { NoteState, Note } from '../../store/types';
+import { setNote, updateNote } from '../../store/note/actions';
+import NoteActions from './NoteActions';
+import NoteSettings from './NoteSettings';
+import { createNote } from '../../services/note';
+import BottomMenuDrawer from '../common/menu/BottomMenuDrawer';
 
 const MENU_OPTIONS = 'MENU_OPTIONS';
 const MENU_SETTINGS = 'MENU_SETTINGS';
 type drawerType = 'MENU_OPTIONS' | 'MENU_SETTINGS';
 interface NoteBuilderProps {
   noteState: NoteState;
+  noteDispatch: NoteDispatch;
   route: any;
   navigation: any;
 }
+interface NoteBuilderState {
+  drawerMenu: drawerType | null;
+}
 
-class NoteBuilder extends Component<NoteBuilderProps, any> {
+class NoteBuilder extends Component<NoteBuilderProps, NoteBuilderState> {
   private wrapperContent: any;
   private wrapperTitle: any;
 
   constructor(props: any) {
     super(props);
-    this.state = {
-      title: '',
-      content: '',
-      color: Color.SHARK.value,
-      drawerMenu: false,
-    };
+    this.state = { drawerMenu: null };
     this.wrapperTitle = React.createRef();
     this.wrapperContent = React.createRef();
   }
 
   componentDidMount() {
-    const { noteId } = this.props.route?.params ?? {};
-    const note = this.props.noteState.items.find(({ id }) => id === noteId);
+    const { noteId } = this.props.route?.params ?? 0;
+    this.setCurrentNote(noteId, this.props.noteState.items);
+  }
 
-    if (note) {
-      this.setState({
-        title: note.title,
-        content: note.content,
-        color: note.color,
-      });
-      this.props.navigation.setParams({ backgroundColor: note.color });
+  componentDidUpdate(prevProps: NoteBuilderProps) {
+    const prevNoteId = prevProps.route?.params?.noteId ?? 0;
+    const noteId = this.props.route?.params?.noteId ?? 0;
+
+    if (prevNoteId !== noteId) {
+      this.setCurrentNote(noteId, this.props.noteState.items);
     }
   }
+
+  componentWillUnmount() {
+    this.props.noteDispatch(updateNote(this.props.noteState.note));
+  }
+
+  setCurrentNote = (noteId: number | undefined, notes: Array<Note>) => {
+    const note = notes.find(({ id }) => id === noteId) ?? createNote();
+    this.props.noteDispatch(setNote(note));
+    this.props.navigation.setParams({ backgroundColor: note.color });
+  };
 
   handleShowOptions = () => this.handleOpenDrawer(MENU_OPTIONS);
   handleShowSettings = () => this.handleOpenDrawer(MENU_SETTINGS);
@@ -69,34 +79,43 @@ class NoteBuilder extends Component<NoteBuilderProps, any> {
       drawerMenu: prevState.drawerMenu !== drawer ? drawer : null,
     }));
   };
-  handleHideDrawer = () => this.setState({ drawerMenu: false });
-  handleTitleChange = (title: string) => this.setState({ title });
-  handleContentChange = (content: string) => this.setState({ content });
-  handleSubmit = () => this.wrapperContent.current.focus();
-  setColor = (color: string) => {
-    this.props.navigation.setParams({ backgroundColor: color });
-    this.setState({ color });
+  handleHideDrawer = () => this.setState({ drawerMenu: null });
+
+  handleTitleChange = (title: string) => {
+    const { note } = this.props.noteState;
+    this.props.noteDispatch(setNote({ ...note, title }));
+  };
+  handleContentChange = (content: string) => {
+    const { note } = this.props.noteState;
+    this.props.noteDispatch(setNote({ ...note, content }));
   };
 
-  getShadowStyle = () => ({
-    ...Platform.select({
-      ios: {
-        backgroundColor: this.state.color,
-        shadowColor: Color.getDarkColor(this.state.color),
-        shadowOffset: { width: 0, height: -1 },
-        shadowOpacity: 0.8,
-        shadowRadius: 2,
-      },
-      android: {
-        borderTopWidth: 1,
-        borderTopColor: Color.getDarkColor(this.state.color),
-        elevation: 1,
-      },
-    }),
-  });
+  handleSubmit = () => this.wrapperContent.current.focus();
+
+  getShadowStyle = () => {
+    const { note } = this.props.noteState;
+
+    return {
+      ...Platform.select({
+        ios: {
+          backgroundColor: note.color,
+          shadowColor: Color.getDarkColor(note.color),
+          shadowOffset: { width: 0, height: -1 },
+          shadowOpacity: 0.8,
+          shadowRadius: 2,
+        },
+        android: {
+          borderTopWidth: 1,
+          borderTopColor: Color.getDarkColor(note.color),
+          elevation: 1,
+        },
+      }),
+    };
+  };
 
   render() {
-    const { title, content, drawerMenu, color } = this.state;
+    const { drawerMenu } = this.state;
+    const { title, content, color } = this.props.noteState.note;
     const menuOptionsActive = drawerMenu === MENU_OPTIONS;
     const menuSettingsActive = drawerMenu === MENU_SETTINGS;
 
@@ -177,65 +196,20 @@ class NoteBuilder extends Component<NoteBuilderProps, any> {
             />
           </TouchableOpacity>
         </View>
-        {/* TODO Mover BottomMenuDrawer to it's own componenet */}
         <BottomMenuDrawer
-          visible={drawerMenu === MENU_OPTIONS}
-          style={[{ backgroundColor: color }, this.getShadowStyle()]}
+          visible={menuOptionsActive || menuSettingsActive}
+          style={[this.getShadowStyle()]}
+          backgroundColor={color}
         >
-          <BottomMenuItem
-            text="Take photo"
-            renderIcon={() => (
-              <MIcon
-                name="camera-outline"
-                size={20}
-                color={Color.SILVER_SAND.value}
-              />
-            )}
-          />
-          <BottomMenuItem
-            text="Choose image"
-            renderIcon={() => (
-              <MIcon
-                name="image-outline"
-                size={20}
-                color={Color.SILVER_SAND.value}
-              />
-            )}
-          />
-          <BottomMenuItem
-            text="Drawing"
-            renderIcon={() => (
-              <MIcon name="brush" size={20} color={Color.SILVER_SAND.value} />
-            )}
-          />
-          <BottomMenuItem
-            text="Recording"
-            renderIcon={() => (
-              <MIcon
-                name="microphone"
-                size={20}
-                color={Color.SILVER_SAND.value}
-              />
-            )}
-          />
-          <BottomMenuItem
-            text="Checkboxes"
-            renderIcon={() => (
-              <MIcon
-                name="checkbox-marked-outline"
-                size={20}
-                color={Color.SILVER_SAND.value}
-              />
-            )}
-          />
-          <ColorPicker onChangeColor={this.setColor} color={color} />
+          <NoteActions visible={menuOptionsActive} />
+          <NoteSettings visible={menuSettingsActive} />
         </BottomMenuDrawer>
       </View>
     );
   }
 }
 
-export default withNoteState(NoteBuilder);
+export default withNote(NoteBuilder);
 
 const actionsHeight = 50;
 const styles = StyleSheet.create({
@@ -279,7 +253,4 @@ const styles = StyleSheet.create({
     height: actionsHeight,
     width: actionsHeight,
   },
-  // iconActive: {
-  //   backgroundColor: Color.SHARK_DARKER.value,
-  // },
 });

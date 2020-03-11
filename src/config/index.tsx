@@ -36,7 +36,7 @@ export class Color {
 
   // private to disallow creating other instances of this type
   private constructor(
-    private readonly name: string,
+    public readonly name: string,
     public readonly value: string,
   ) {}
 

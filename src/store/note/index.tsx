@@ -2,11 +2,11 @@ import React, { createContext, useReducer, useContext, ReactNode } from 'react';
 import noteReducer, { initialNoteState } from './reducer';
 import { NoteState, NoteActionTypes } from './types';
 
-type Dispatch = (action: NoteActionTypes) => void;
+export type NoteDispatch = (action: NoteActionTypes) => void;
 type NoteProviderProps = { children: ReactNode };
 
 const NoteStateContext = createContext<NoteState | undefined>(undefined);
-const NoteDispatchContext = createContext<Dispatch | undefined>(undefined);
+const NoteDispatchContext = createContext<NoteDispatch | undefined>(undefined);
 
 const NoteProvider = ({ children }: NoteProviderProps) => {
   const [state, dispatch] = useReducer(noteReducer, initialNoteState);
@@ -20,7 +20,7 @@ const NoteProvider = ({ children }: NoteProviderProps) => {
   );
 };
 
-function useNote(): [NoteState, Dispatch] {
+function useNote(): [NoteState, NoteDispatch] {
   const state = useContext(NoteStateContext);
   const dispatch = useContext(NoteDispatchContext);
 

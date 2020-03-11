@@ -11,15 +11,58 @@ import {
 import { Color } from '../../../config';
 const { height, width } = Dimensions.get('window');
 
-interface NoteItemProps {
+interface BottomMenuDrawerProps {
   style?: StyleProp<ViewStyle>;
   visible: boolean;
+  backgroundColor: string;
 }
 
 interface Styles {
   container: ViewStyle;
   visible: ViewStyle;
 }
+
+const BottomMenuDrawer: SFC<BottomMenuDrawerProps> = ({
+  children,
+  style,
+  visible,
+  backgroundColor,
+}) => {
+  const yTranslate = new Animated.Value(0);
+
+  useEffect(() => {
+    if (visible) {
+      Animated.spring(yTranslate, {
+        toValue: -height - 50,
+        friction: 10,
+      }).start();
+    } else {
+      Animated.timing(yTranslate, {
+        toValue: 0,
+        duration: 2000,
+        easing: Easing.linear,
+      }).start();
+    }
+  }, [visible]);
+
+  const translateStyle = { transform: [{ translateY: yTranslate }] };
+
+  return (
+    <Animated.View
+      style={[
+        styles.container,
+        style,
+        translateStyle,
+        { backgroundColor },
+        visible && styles.visible,
+      ]}
+    >
+      {children}
+    </Animated.View>
+  );
+};
+
+export default BottomMenuDrawer;
 
 const styles = StyleSheet.create<Styles>({
   container: {
@@ -49,39 +92,3 @@ const styles = StyleSheet.create<Styles>({
     opacity: 1,
   },
 });
-
-const BottomMenuDrawer: SFC<NoteItemProps> = ({ children, style, visible }) => {
-  const yTranslate = new Animated.Value(0);
-
-  useEffect(() => {
-    if (visible) {
-      Animated.spring(yTranslate, {
-        toValue: -height - 50,
-        friction: 10,
-      }).start();
-    } else {
-      Animated.timing(yTranslate, {
-        toValue: 0,
-        duration: 2000,
-        easing: Easing.linear,
-      }).start();
-    }
-  }, [visible]);
-
-  const translateStyle = { transform: [{ translateY: yTranslate }] };
-
-  return (
-    <Animated.View
-      style={[
-        styles.container,
-        style,
-        translateStyle,
-        visible && styles.visible,
-      ]}
-    >
-      {children}
-    </Animated.View>
-  );
-};
-
-export default BottomMenuDrawer;

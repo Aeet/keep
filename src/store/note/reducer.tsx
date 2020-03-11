@@ -4,13 +4,21 @@ import {
   NoteState,
   NoteActionTypes,
   ADD_NOTE,
+  UPDATE_NOTE,
   REMOVE_NOTE,
+  SET_NOTE,
   SET_LIST_TYPE,
 } from './types';
+import { Color } from '../../config';
 
 export const initialNoteState: NoteState = {
   items: generateNoteList(10),
   listType: 'list',
+  note: {
+    title: '',
+    content: '',
+    color: Color.SHARK.value,
+  },
 };
 
 export default function noteReducer(
@@ -30,6 +38,22 @@ export default function noteReducer(
         };
       }
       return state;
+    }
+    case UPDATE_NOTE: {
+      const note = action.payload;
+      return {
+        ...state,
+        items: state.items.map((item: Note) =>
+          item.id === note.id ? { ...note } : item,
+        ),
+      };
+    }
+    case SET_NOTE: {
+      const note = action.payload;
+      return {
+        ...state,
+        note,
+      };
     }
     case SET_LIST_TYPE: {
       return { ...state, listType: action.listType };

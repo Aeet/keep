@@ -1,7 +1,7 @@
 import React, { SFC } from 'react';
 import { StyleSheet, FlatList } from 'react-native';
 import { Color } from './../../../config';
-import ColorPickerItemProps from './ColorPickerItem';
+import ColorPickerItem from './ColorPickerItem';
 
 interface ColorPickerProps {
   color?: string;
@@ -24,7 +24,7 @@ const ColorPicker: SFC<ColorPickerProps> = ({ color, onChangeColor }) => {
       data={Color.ALL_COLORS}
       showsHorizontalScrollIndicator={false}
       renderItem={({ item }) => (
-        <ColorPickerItemProps
+        <ColorPickerItem
           color={item}
           onPress={onChangeColor}
           selected={color === item.value}
