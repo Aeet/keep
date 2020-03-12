@@ -9,7 +9,7 @@ import {
 import NoteItem from './NoteItem';
 import { Note } from '../../store/types';
 import BottomTab from './BottomTab';
-import SearchBar, { SearchBarDimensions } from './SearchBar';
+import SearchBar, { SearchBarDimensions } from './search-bar/SearchBar';
 import { useNote } from '../../store/note';
 const { height, offsetTop } = SearchBarDimensions;
 

@@ -18,6 +18,8 @@ export class Color {
   static readonly SILVER_SAND = new Color('Silver Sand', '#b4b5b5');
   static readonly SHARK_DARKER = new Color('Shark dark', '#1c1d20');
   static readonly SHARK_LIGHTER = new Color('Shark lighter', '#2d2e33');
+  static readonly MALIBU = new Color('Malibu', '#89b4f8');
+  static readonly MALIBU_DARKER = new Color('Malibu Darker', '#8ab3f6');
 
   static readonly ALL_COLORS = [
     Color.SHARK,

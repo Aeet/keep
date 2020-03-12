@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 35,
-    zIndex: 55,
+    zIndex: 5,
   },
   mainButton: {
     width: 55,
