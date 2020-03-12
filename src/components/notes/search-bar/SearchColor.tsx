@@ -1,20 +1,14 @@
 import React from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
-import AppText from '../../common/text/AppText';
 import { Color } from '../../../config';
-import searchStyles from './styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import SearchSection from './SearchSection';
 
 const { width } = Dimensions.get('window');
 
 const SearchColor = () => {
   return (
-    <View>
-      <View style={searchStyles.sectionHeader}>
-        <AppText color={Color.SILVER_SAND.value} fontWeight="600" fontSize={12}>
-          COLORS
-        </AppText>
-      </View>
+    <SearchSection title={'COLORS'}>
       <View style={styles.container}>
         {Color.ALL_COLORS.map(color => (
           <View style={styles.colorWrapper} key={color.value}>
@@ -27,7 +21,7 @@ const SearchColor = () => {
           </View>
         ))}
       </View>
-    </View>
+    </SearchSection>
   );
 };
 

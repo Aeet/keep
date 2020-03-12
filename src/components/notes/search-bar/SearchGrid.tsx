@@ -1,13 +1,6 @@
 import React, { useState, SFC } from 'react';
-import {
-  View,
-  Dimensions,
-  TouchableOpacity,
-  Animated,
-  Easing,
-} from 'react-native';
-import AppText from '../../common/text/AppText';
-import { Color } from '../../../config';
+import { Dimensions, Animated, Easing } from 'react-native';
+import SearchSection from './SearchSection';
 import searchStyles from './styles';
 
 const deviceWidth = Dimensions.get('window').width;
@@ -80,28 +73,17 @@ const SearchGrid: SFC<SearchGridButtonsProps> = ({
   const extraItems = data.slice(itemOnRow);
 
   return (
-    <View>
-      <View style={searchStyles.sectionHeader}>
-        <AppText color={Color.SILVER_SAND.value} fontWeight="600" fontSize={12}>
-          {title}
-        </AppText>
-        {data.length > itemOnRow && (
-          <TouchableOpacity onPress={() => handleShowMore(!expanded)}>
-            <AppText
-              color={Color.MALIBU_DARKER.value}
-              fontSize={12}
-              fontWeight="600"
-            >
-              {expanded ? 'LESS' : 'MORE'}
-            </AppText>
-          </TouchableOpacity>
-        )}
-      </View>
+    <SearchSection
+      title={title}
+      onPress={() => handleShowMore(!expanded)}
+      actionLabel={expanded ? 'LESS' : 'MORE'}
+      showAction={data.length > itemOnRow}
+    >
       <Animated.View style={[searchStyles.sectionContent, contentStyle]}>
         {items.map(renderBasicItem)}
         {extraItems.map(renderOtherItem)}
       </Animated.View>
-    </View>
+    </SearchSection>
   );
 };
 
